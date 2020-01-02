@@ -24,6 +24,8 @@ class Solution:
         """
         Transform ListNode into numbers, and add. Transform back to ListNode.
 
+        Time: O(max(m+n))
+        Space: O(max(m+n))
         """
         # transform input ListNode into two numbers, using string as intermediate data type
         l1_str = str(l1.val)
@@ -48,6 +50,49 @@ class Solution:
 
         return res
 
+    def solution1(self, l1: ListNode, l2: ListNode) -> ListNode:
+        """
+        Elementary Math
+
+        Time: O(max(m+n))
+        Space: O(max(m+n))
+        """
+        # initialize carry, pointer and dummyHead (used for representing the starting node)
+        carry = 0
+        pointer = ListNode(None)
+        dummy_head = pointer
+
+        while True:
+            # retrieve two adders and add them together with the carry from last loop
+            add1 = 0 if not l1 else l1.val
+            add2 = 0 if not l2 else l2.val
+            res_tmp = add1 + add2 + carry
+
+            # if the result is 0, and l1 & l2 reach their end
+            if res_tmp == 0 and not l1 and not l2:
+                # if [0] + [0], return 0
+                if pointer == dummy_head:
+                    return ListNode(0)
+                else:
+                    break
+
+            # check for carry
+            if res_tmp >= 10:
+                carry = 1
+                res_tmp -= 10
+            else:
+                carry = 0
+
+            # update the result using pointer, and l1 & l2
+            pointer.next = ListNode(res_tmp)
+            pointer = pointer.next
+            if l1:
+                l1 = l1.next
+            if l2:
+                l2 = l2.next
+
+        return dummy_head.next
+
 
 def main():
     # two numbers to add, stored in ListNode
@@ -61,9 +106,11 @@ def main():
 
     solution = Solution()
 
-    # my solution
-    res = solution.addTwoNumbers(l1, l2)
+    # solutions
+    # res = solution.addTwoNumbers(l1, l2)
+    res = solution.solution1(l1, l2)
 
+    # print the solution
     res_str = str(res.val)
     while res.next:
         res_str += ' -> '
