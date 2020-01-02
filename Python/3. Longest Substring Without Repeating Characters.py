@@ -22,7 +22,7 @@ class Solution(object):
                  Note that the answer must be a substring, "pwke" is a subsequence and not a substring.
     """
 
-    def checkRepeat(self, substring: str) -> bool:
+    def __checkRepeat(self, substring: str) -> bool:
 
         mySet = []
 
@@ -47,7 +47,7 @@ class Solution(object):
 
         for windowSize in reversed(range(1, total_length + 1)):
             for i in range(total_length - windowSize + 1):
-                res = self.checkRepeat(s[i:i + windowSize])
+                res = self.__checkRepeat(s[i:i + windowSize])
 
                 if res:
                     return windowSize
