@@ -100,16 +100,36 @@ class Solution(object):
 
     def solution3(self, s: str) -> int:
         """
-        Sliding Window Optimized
+        Sliding Window Optimized using Hash Table/Dictionary
+
+        Like the sliding window. If found repeated char, start index jumps to the next index of the last repeated char.
+
+        Time: O(n)          # half as solution 2
+        Space: O(min(m, n))
         """
-        pass
+        dict = {}       # key: char, value: last index
+        max_length = 0
+        start_index = 0
+
+        for end_index in range(len(s)):
+            char = s[end_index]
+
+            # if found repeated char, update the start index
+            if char in dict.keys():
+                start_index = max(dict[char] + 1, start_index)
+
+            length = end_index - start_index + 1    # current length
+            max_length = max(length, max_length)    # maximum length
+            dict[char] = end_index                  # update dictionary
+
+        return max_length
 
 
 def main():
     solution = Solution()
 
-    input = "abcabcbb"
-    res = solution.solution2(input)
+    input = "dvdf"
+    res = solution.solution3(input)
     print(res)
 
 
