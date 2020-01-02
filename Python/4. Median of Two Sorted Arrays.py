@@ -63,14 +63,66 @@ class Solution:
         else:
             return (sorted_array[len(sorted_array) // 2 - 1] + sorted_array[len(sorted_array) // 2]) / 2
 
+    def solution1(self, nums1: [int], nums2: [int]) -> float:
+        """
+        Binary Search
+
+        Time: O(log(min(m+n)))
+        Space: O(1)
+        """
+        m, n = len(nums1), len(nums2)
+        # otherwise taking half of the array will exceed the length of the other array
+        if m > n:
+            m, n, nums1, nums2 = n, m, nums2, nums1
+
+        i_min, i_max = 0, len(nums1)
+        half_length = (m + n) // 2
+
+        # loop until two pointers be equal (in fact i_min will not greater than i_max)
+        while i_min <= i_max:
+            # update i_middle and j_middle
+            i_middle = (i_min + i_max) // 2
+            j_middle = half_length - i_middle
+
+            # if i_middle = 0 means all numbers in nums1 belong to the right part, no need for updating middle pointers
+            if i_middle > 0 and nums1[i_middle - 1] > nums2[j_middle]:
+                i_max = i_middle - 1
+
+            # if i_middle = m means all numbers in nums1 belong to the left part, no need for updating middle pointers
+            elif i_middle < m and nums1[i_middle] < nums2[j_middle - 1]:
+                i_min = i_middle + 1
+
+            else:
+                # first calculate right_min
+                # because the length of the right part could be 1 more thant left part, then just return right_min
+                # be careful about the boundary cases (i_middle or j_middle on the rightmost position)
+                if i_middle == m:
+                    right_min = nums2[j_middle]
+                elif j_middle == n:
+                    right_min = nums1[i_middle]
+                else:
+                    right_min = min(nums1[i_middle], nums2[j_middle])
+                if (m + n) % 2 == 1:
+                    return right_min
+
+                # if (m + n) % 2 == 0, then we need also left_max
+                # also be careful about the two boundary cases
+                if i_middle == 0:
+                    left_max = nums2[j_middle - 1]
+                elif j_middle == 0:
+                    left_max = nums1[i_middle - 1]
+                else:
+                    left_max = max(nums1[i_middle - 1], nums2[j_middle - 1])
+                return (left_max + right_min) / 2
+
 
 def main():
     solution = Solution()
 
-    nums1 = [1, 2]
-    nums2 = [3, 4]
+    nums1 = [1, 2, 3]
+    nums2 = [4, 5, 6]
 
-    res = solution.findMedianSortedArrays2(nums1, nums2)
+    res = solution.solution1(nums1, nums2)
     print(res)
 
 
