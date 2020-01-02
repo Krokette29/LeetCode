@@ -40,7 +40,7 @@ class Solution(object):
         TLE (Time Limit Exceed) on LeetCode.
 
         Time: O(n^3)
-        Space: O(min(n, m))     # for checkRepeat, m is the size of charset
+        Space: O(min(m, n))     # for checkRepeat, m is the size of charset
         """
 
         total_length = len(s)
@@ -63,23 +63,53 @@ class Solution(object):
         TLE.
 
         Time: O(n^3)
-        Space: O(min(n, m))
+        Space: O(min(m, n))
         """
         return 0
 
     def solution2(self, s: str) -> int:
         """
         Sliding Window
+
+        Use a queue. Loop over all chars in the string.
+        If the char is not in the queue, append it. Otherwise pop the queue.
+
+        Time: O(n)
+        Space: O(min(m, n))     # for queue
         """
+        queue = []
+        max_length = 0
+        index = 0
 
+        # loop over all chars in the string
+        while index < len(s):
+            char = s[index]
 
+            # if char not in the queue, append it
+            if char not in queue:
+                queue.append(char)
+                index += 1
+
+            # otherwise check the result, add pop the queue
+            else:
+                if len(queue) > max_length:
+                    max_length = len(queue)
+                del queue[0]
+
+        return max_length if max_length > len(queue) else len(queue)
+
+    def solution3(self, s: str) -> int:
+        """
+        Sliding Window Optimized
+        """
+        pass
 
 
 def main():
     solution = Solution()
 
-    input = "pwwkew"
-    res = solution.lengthOfLongestSubstring(input)
+    input = "abcabcbb"
+    res = solution.solution2(input)
     print(res)
 
 
